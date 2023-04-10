@@ -6,105 +6,115 @@ import ar.edu.unlam.pb2.dominio.Sala;
 
 public class InterfazSalaDeSala {
 
+	
+
 	public static void main(String[] args) {
 
-		int opcionSeleccionada = 0, filas = 0, columnas = 0;
-
 		Scanner teclado = new Scanner(System.in);
-
-		System.out.println("Bienvenido a la Sala de Cine");
-		System.out.println("Ingrese la cantidad de Filas de su Cine");
+		int filas, columnas,opcionSeleccionada = 0;
+		
+		System.out.println("Bienvenido a la sala de cine");
+		System.out.println("Ingrese la cantidad de Filas de su cine");
 		filas = teclado.nextInt();
-		System.out.println("Ingrese la cantidad de Columnas de su Cine");
+		System.out.println("Ingrese la cantidad de Columnas de su cine");
 		columnas = teclado.nextInt();
-		Sala nuevaSala = new Sala(filas, columnas);
-
-		do {
-
-			menuDeOpciones();
-			opcionSeleccionada = teclado.nextInt();
+		Sala sala = new Sala(filas, columnas);
+		sala.liberarButacas();
+		
+	do {
+			mostrarMenuPrincipal();
 			switch (opcionSeleccionada) {
 			case 1:
-				mapaDeButacas(nuevaSala);
+				imprimirSala(sala);
 				break;
 			case 2:
-				ocuparButaca(nuevaSala, teclado);
+				ocuparButaca(sala, teclado);
 				break;
 			case 3:
-				consultarTotalButaca(nuevaSala);
+				consultarOcupadas(sala);
+				break;
 			case 4:
-
+				consultarContiguas(sala, teclado);
 				break;
 			case 5:
-				System.out.println("Gracias, Vuelva Pronto :D");
+				System.out.println("Gracias Vuelva pronto! :D");
 				break;
 			default:
-				System.out.println("Error, opcion incorrecta");
+				System.out.println("Error, vuelva a intentarlo");
 				break;
 			}
-
-		} while (opcionSeleccionada != 4);
-
+		} while (opcionSeleccionada != 5);
 	}
 
-	public static void menuDeOpciones() {
-		System.out.println("***Menu de Opciones***");
-		System.out.println("\n1- Mapa de Butacas" + "\n2- Ocupar Butaca" + "\n3- Consultar total de Butacas Ocupadas"
-				+ "\n4- Ocupar Butacas Contiguas" + "\n5- Salir");
+	public static void mostrarMenuPrincipal() {
+		System.out.println("Bienvenido al Menu Principal" 
+						+ "\n1---------> Mostrar estado de las butacas"
+						+ "\n2---------> Ocupar butaca" 
+						+ "\n3---------> Consultar cantidad TOTAL de butacas OCUPADAS"
+						+ "\n4---------> Ocupar butacas contiguas" 
+						+ "\n0---------> SALIR");
 	}
 
-	public static void mapaDeButacas(Sala sala) {
-		System.out.println("Butacas del Cine");
-		System.out.println(sala);
-		System.out.println("-------------------------------------");
+	public static void imprimirSala(Sala sala) {
+		for (Integer i = 0; i < sala.getFilas(); i++) {
+			for (Integer j = 0; j < sala.getColumnas(); j++) {
+				if (sala.getButacas()[i][j] == false) {
+					System.out.print("L ");
+				} else {
+					System.out.print("O ");
+				}
+
+			}
+			
+		}
 	}
 
 	public static void ocuparButaca(Sala sala, Scanner teclado) {
-		int numeroDeFila, numeroDeColumna;
+		Integer numerodefila;
+		Integer numerodecolumna;
+		do {
+			System.out.println("Ingrese el Numero de la Fila de su Butaca, entre 1 y " + sala.getFilas());
+
+			numerodefila = teclado.nextInt() - 1;
+		} while (numerodefila >= sala.getFilas());
 
 		do {
-			System.out.println("Ingrese el numero de la fila de su Butaca - Entre 1 y " + sala.getFilas());
-			numeroDeFila = teclado.nextInt();
+			System.out.println("Ingrese el Numero de la Columna de su Butaca, entre 1 y " + sala.getColumnas());
+			numerodecolumna = teclado.nextInt() - 1;
+		} while (numerodecolumna >= sala.getColumnas());
 
-		} while (numeroDeFila >= sala.getFilas());
-
-		do {
-			System.out.println("Ingrese el numero de la columna de su Butaca - Entre 1 y " + sala.getColumnas());
-			numeroDeColumna = teclado.nextInt();
-		} while (numeroDeColumna >= sala.getColumnas());
-
-		if (sala.ocuparButaca(numeroDeFila, numeroDeColumna)) {
-			System.out.println("La butaca se Ocupo correctamente");
+		if (sala.ocuparButaca(numerodefila, numerodecolumna)) {
+			System.out.println("Su butaca se ocupo correctamente");
 		} else {
-			System.out.println("La butaca no se Ocupo correctamente");
+			System.out.println("La Butaca no se Ocupar");
 		}
 	}
 
-	public static void consultarTotalButaca(Sala sala) {
-		System.out.println("La cantidad de butacas ocupadas es: " + sala.consultarTotalButacasOcupadas());
+	public static void consultarOcupadas(Sala sala) {
+		System.out.println(" La Cantidad total de Butacas ocupadas es " + sala.consultarTotalOcupadas());
 	}
 
-	public static void ocuparButacasContiguas(Sala sala, Scanner teclado) {
+	public static void consultarContiguas(Sala sala, Scanner teclado) {
 
-		int fila, columna, cantidad;
-
-		System.out.println("Ingrese la Fila de las Butacas ");
-		fila = teclado.nextInt();
-		System.out.println("Ingrese la Columna de las Butacas ");
-		columna = teclado.nextInt();
-		System.out.println("Ingrese la cantidad de Butacas deseadas");
-		cantidad = teclado.nextInt();
+		System.out.println("Ingrese la Fila de su Butaca inicial");
+		Integer fila = teclado.nextInt();
+		System.out.println("Ingrese la Columna de su Butaca inicial");
+		Integer columna = teclado.nextInt();
+		System.out.println("Ingrese la cantidad de asientos que deseada");
+		Integer cantidad = teclado.nextInt();
 		if (columna + cantidad > sala.getColumnas()) {
-			System.out.println("No puede ocupar mas butacas que la cantidad maxima de columnas ");
-			menuDeOpciones();
+			System.out.println("No puede ocupar mas butacas que la cantidad maxima de columnas");
+			
 		}
-		
-		if(sala.consultarButacasContiguas(fila, columna, cantidad) == true) {
-			sala.ocuparButacasContiguas(fila, columna, cantidad);
-			System.out.println("Las butacas se ocuparon exitosamente");
-		}else {
-			System.out.println("No se pudieron ocupar las butacas correctamente");
+
+		if (sala.comprobarButcasContiguas(fila - 1, columna - 1, cantidad - 1) == true) {
+			sala.ocuparButcasContiguas(fila - 1, columna - 1, cantidad - 1);
+			System.out.println("Ocupadas correctamente");
+		} else {
+			System.out.println("No hay dicha cantidad de butacas contiguas en esa fila y columna");
 		}
 	}
 
-}
+	
+	}
+

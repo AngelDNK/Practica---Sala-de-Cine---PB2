@@ -1,114 +1,108 @@
 package ar.edu.unlam.pb2.dominio;
 
+import java.util.Arrays;
+
 public class Sala {
 
-	private int butacasTotales;
-	private int filas = 0;
-	private int columnas = 0;
+	private Integer butacasTotales;
+	private Integer filas;
+	private Integer columnas;
 	private Boolean[][] butacas;
 
-	public Sala(int filas, int columnas) {
 
-		this.butacasTotales = butacasTotales;
-		this.filas = filas;
-		this.columnas = columnas;
-		butacas = new Boolean[filas][columnas];
-
+	
+	
+	public Sala(Integer cantidadFilas, Integer cantidadColumnas) {	
+		this.butacasTotales=cantidadFilas*cantidadColumnas;
+		this.filas=cantidadFilas;
+		this.columnas=cantidadColumnas;
+		this.butacas=new Boolean[cantidadFilas][cantidadColumnas];
+		
 	}
-
-	public boolean consultarButaca(int fila, int columna) {
-		boolean seConsultoButaca = false;
-		if (butacas[fila][columna] == null) {
-			seConsultoButaca = true;
+	public void liberarButacas() {	
+	for(Integer i=0; i<this.filas;i++) {
+		for(Integer j=0; j<this.columnas;j++) {
+			if(butacas[i][j]==null||butacas[i][j]==true) {
+				butacas[i][j]=false;
+			}
+			
+			}
+		}
+	
+	}
+	
+	public Boolean ocuparButaca(Integer fila, Integer columna) {
+		if(butacas[fila][columna]==false) {
+			butacas[fila][columna]=true;
+			return true;
 		}
 
-		return seConsultoButaca;
+		return false;
 	}
-
-	public boolean ocuparButaca( int fila, int columna) {
-		boolean seOcupoButaca = false;
-		if (consultarButaca(fila, columna)) {
-			butacas[fila][columna] = true;
-			seOcupoButaca = true;
+	
+	public Boolean consultarButaca(Integer fila, Integer columna) {
+		if(butacas[fila][columna]==false) {
+			return true;
 		}
 
-		return seOcupoButaca;
-
+		return false;
 	}
-
-	public boolean consultarTotalButacasOcupadas() {
-		boolean seConsultoTotalDeButacasOcupadas = false;
-		for (int i = 0; i < filas; i++) {
-			for (int j = 0; j < j; j++) {
-				if (butacas[i][j] == true) {
-					seConsultoTotalDeButacasOcupadas = true;
+	
+	public Integer consultarTotalOcupadas() {
+	Integer ocupadas=0;
+	
+	for(Integer i=0; i<this.filas;i++) {
+		for(Integer j=0; j<this.columnas;j++) {
+			if(butacas[i][j]==true) {
+			ocupadas++;
+			}
+			}
+		}
+	return ocupadas;
+	}
+	
+	public Boolean comprobarButcasContiguas(Integer fila, Integer columna, Integer cantidad) {
+		Boolean hayespacio=false;
+		for(Integer i=0;i<=cantidad;i++) {
+				if(butacas[fila][columna+i]==false) { 
+					hayespacio=true;
+				}else {
+					return hayespacio=false;
 				}
-			}
-		}
-
-		return seConsultoTotalDeButacasOcupadas;
-	}
-
-	public boolean consultarButacasContiguas(int fila, int columna, int cantidad) {
-		boolean hayEspacioPara = false;
-		for (int i = 0; i < cantidad; i++) {
-			if (butacas[fila][columna + i] == false) {
-				hayEspacioPara = true;
-			}
-		}
-
-		return hayEspacioPara;
-	}
-
-	public void ocuparButacasContiguas(int fila, int columna, int cantidad) {
-		if (consultarButacasContiguas(fila, columna, columna)) {
-			for (int i = 0; i <= cantidad; i++) {
-				butacas[fila][columna + i] = true;
-			}
-		}
-	}
-
-	public String toString() {
-		String mapaDeButacas = "";
-
-		for (int fila = 0; fila < filas; fila++) {
-
-			mapaDeButacas += "\n-------------------------\n|";
-
-			for (int columna = 0; columna < butacas[fila].length; columna++) {
-				if (butacas[fila][columna] == null) {
-					mapaDeButacas += " L |";
-				} else {
-					mapaDeButacas += " O |";
 				}
-			}
-
+						
+		return hayespacio;
+	}
+	public void ocuparButcasContiguas(Integer fila, Integer columna, Integer cantidad) {
+		if(comprobarButcasContiguas(fila, columna, cantidad)) {
+			for(Integer i=0;i<=cantidad;i++) {
+				butacas[fila][columna+i]=true;
+				
+				}
 		}
-		return mapaDeButacas;
-
 	}
 
-	public int getButacasTotales() {
+	public Integer getButacasTotales() {
 		return butacasTotales;
 	}
 
-	public void setButacasTotales(int butacasTotales) {
+	public void setButacasTotales(Integer butacasTotales) {
 		this.butacasTotales = butacasTotales;
 	}
 
-	public int getFilas() {
+	public Integer getFilas() {
 		return filas;
 	}
 
-	public void setFilas(int filas) {
+	public void setFilas(Integer filas) {
 		this.filas = filas;
 	}
 
-	public int getColumnas() {
+	public Integer getColumnas() {
 		return columnas;
 	}
 
-	public void setColumnas(int columnas) {
+	public void setColumnas(Integer columnas) {
 		this.columnas = columnas;
 	}
 
@@ -119,4 +113,12 @@ public class Sala {
 	public void setButacas(Boolean[][] butacas) {
 		this.butacas = butacas;
 	}
+	
+	public String toString() {
+		return "SALA [butacas=" + Arrays.toString(butacas) + "]";
+	}
+	
 }
+
+	
+
